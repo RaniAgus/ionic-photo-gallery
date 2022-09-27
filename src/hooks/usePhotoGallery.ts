@@ -1,10 +1,6 @@
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { useState } from 'react';
-
-export interface UserPhoto {
-  filepath: string;
-  webviewPath?: string;
-}
+import { UserPhoto, savePicture } from '../utils/filesystem';
 
 const usePhotoGallery = () => {
   const [photos, setPhotos] = useState<UserPhoto[]>([]);
@@ -19,15 +15,13 @@ const usePhotoGallery = () => {
       quality: 100,
     });
 
-    const newPhoto = {
-      filepath: `${new Date().getTime()}.jpeg`,
-      webviewPath: photo.webPath
-    };
+    const fileName = `${new Date().getTime()}.jpeg`;
+    const savedFileImage = await savePicture(photo, fileName);
 
-    setPhotos((p): UserPhoto[] => [...p, newPhoto]);
+    setPhotos((p): UserPhoto[] => [savedFileImage, ...p]);
   }
 
   return { photos, takePhoto };
 };
 
-export default usePhotoGallery
+export default usePhotoGallery;
