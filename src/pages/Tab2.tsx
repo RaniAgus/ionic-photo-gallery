@@ -9,12 +9,11 @@ import {
   IonFabButton,
   IonIcon,
 } from '@ionic/react';
+import usePhotoGallery from '../hooks/usePhotoGallery';
 import './Tab2.css';
 
 const Tab2: React.FC = () => {
-  const takePhoto = () => {
-    console.log('To be implemented soon!');
-  };
+  const { takePhoto } = usePhotoGallery();
 
   return (
     <IonPage>
