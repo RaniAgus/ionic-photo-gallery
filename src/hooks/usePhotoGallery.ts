@@ -1,6 +1,9 @@
+import { Preferences } from '@capacitor/preferences';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { useState } from 'react';
 import { UserPhoto, savePicture } from '../utils/filesystem';
+
+const PHOTO_STORAGE = 'photos';
 
 const usePhotoGallery = () => {
   const [photos, setPhotos] = useState<UserPhoto[]>([]);
@@ -18,7 +21,11 @@ const usePhotoGallery = () => {
     const fileName = `${new Date().getTime()}.jpeg`;
     const savedFileImage = await savePicture(photo, fileName);
 
-    setPhotos((p): UserPhoto[] => [savedFileImage, ...p]);
+    setPhotos((oldPhotos): UserPhoto[] => {
+      const newPhotos = [savedFileImage, ...oldPhotos];
+      Preferences.set({ key: PHOTO_STORAGE, value: JSON.stringify(newPhotos)});
+      return newPhotos;
+    });
   }
 
   return { photos, takePhoto };
