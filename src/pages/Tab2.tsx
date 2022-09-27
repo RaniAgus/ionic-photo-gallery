@@ -13,7 +13,7 @@ import usePhotoGallery from '../hooks/usePhotoGallery';
 import './Tab2.css';
 
 const Tab2: React.FC = () => {
-  const { takePhoto } = usePhotoGallery();
+  const { photos, takePhoto } = usePhotoGallery();
 
   return (
     <IonPage>
