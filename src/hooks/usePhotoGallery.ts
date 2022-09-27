@@ -1,12 +1,18 @@
 import { Preferences } from '@capacitor/preferences';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { useState } from 'react';
-import { UserPhoto, savePicture } from '../utils/filesystem';
-
-const PHOTO_STORAGE = 'photos';
+import { useEffect, useState } from 'react';
+import { PHOTO_STORAGE, UserPhoto, savePicture, loadSaved } from '../utils/photoStorage';
 
 const usePhotoGallery = () => {
   const [photos, setPhotos] = useState<UserPhoto[]>([]);
+
+  // useEffect, por defecto, se invoca cada vez que se renderiza un componente
+  // a menos que pasemos un array de dependencias como segundo parámetro.
+  // En nuestro caso, solo queremos que se llame una única vez, por lo que
+  // pasamos un array vacío.
+  useEffect(() => {
+    loadSaved().then((loadedPhotos) => setPhotos(loadedPhotos));
+  }, []);
 
   const takePhoto = async () => {
     // Notice the magic here: there's no platform-specific code (web, iOS, or
