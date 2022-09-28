@@ -1,5 +1,5 @@
-import { camera, close, trash } from "ionicons/icons";
-import { IonContent, IonPage, IonActionSheet } from "@ionic/react";
+import { camera } from "ionicons/icons";
+import { IonContent, IonPage } from "@ionic/react";
 import usePhotoGallery from "../hooks/usePhotoGallery";
 import { useState } from "react";
 import { UserPhoto } from "../utils/photoStorage";
@@ -8,6 +8,7 @@ import "./Photos.css";
 import AppHeader from "../components/UI/AppHeader";
 import PhotoList from "../components/Photos/PhotoList";
 import AppActionButton from "../components/UI/AppActionButton";
+import DeleteActionSheet from "../components/UI/DeleteActionSheet";
 
 const Tab2: React.FC = () => {
   const [photoToDelete, setPhotoToDelete] = useState<UserPhoto>();
@@ -17,34 +18,27 @@ const Tab2: React.FC = () => {
     setPhotoToDelete(photo);
   };
 
+  const handleDeletePhoto = () => {
+    if (photoToDelete) {
+      deletePhoto(photoToDelete);
+      setPhotoToDelete(undefined);
+    }
+  }
+
+  const handleDismissDeletePhoto = () => {
+    setPhotoToDelete(undefined);
+  }
+
   return (
     <IonPage>
       <AppHeader title="Photo Gallery" />
       <IonContent>
         <PhotoList photos={photos} onClickPhoto={handleClickPhoto} />
         <AppActionButton icon={camera} onClick={takePhoto} />
-        {/* Action Sheet ref: https://ionicframework.com/docs/api/action-sheet */}
-        <IonActionSheet
+        <DeleteActionSheet
           isOpen={!!photoToDelete}
-          buttons={[
-            {
-              text: "Delete",
-              role: "destructive",
-              icon: trash,
-              handler: () => {
-                if (photoToDelete) {
-                  deletePhoto(photoToDelete);
-                  setPhotoToDelete(undefined);
-                }
-              },
-            },
-            {
-              text: "Cancel",
-              icon: close,
-              role: "cancel",
-            },
-          ]}
-          onDidDismiss={() => setPhotoToDelete(undefined)}
+          onDelete={handleDeletePhoto}
+          onDismiss={handleDismissDeletePhoto}
         />
       </IonContent>
     </IonPage>
