@@ -96,3 +96,11 @@ export const loadSaved = async (): Promise<UserPhoto[]> => {
   // Ref: https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API
     : Promise.all(photosInPreferences.map(loadWebviewPathFromPhoto));
 }
+
+export const deletePhotoFromFilesystem = async (photo: UserPhoto): Promise<void> => {
+  const filename = photo.filepath.substr(photo.filepath.lastIndexOf('/') + 1);
+  await Filesystem.deleteFile({
+    path: filename,
+    directory: Directory.Data,
+  });
+}

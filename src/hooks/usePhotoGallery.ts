@@ -1,7 +1,7 @@
 import { Preferences } from '@capacitor/preferences';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { useEffect, useState } from 'react';
-import { PHOTO_STORAGE, UserPhoto, savePicture, loadSaved } from '../utils/photoStorage';
+import { PHOTO_STORAGE, UserPhoto, savePicture, loadSaved, deletePhotoFromFilesystem } from '../utils/photoStorage';
 
 const usePhotoGallery = () => {
   const [photos, setPhotos] = useState<UserPhoto[]>([]);
@@ -34,7 +34,20 @@ const usePhotoGallery = () => {
     });
   }
 
-  return { photos, takePhoto };
+  const deletePhoto = async (photo: UserPhoto) => {
+    // Remove this photo from the Photos reference data array
+    const newPhotos = photos.filter((p) => p.filepath !== photo.filepath);
+
+    // Update photos array cache by overwriting the existing photo array
+    Preferences.set({ key: PHOTO_STORAGE, value: JSON.stringify(newPhotos) });
+
+    // delete photo file from filesystem
+    deletePhotoFromFilesystem(photo);
+
+    setPhotos(newPhotos);
+  };
+
+  return { photos, takePhoto, deletePhoto };
 };
 
 export default usePhotoGallery;
