@@ -54,3 +54,17 @@ Save the file. With permissions in place, we are ready to try out the app on a r
 
 Once again, upon tapping the Camera button on the Photo Gallery tab, the permission prompt should be displayed. Tap OK, then take a picture with the Camera. Afterward, the photo should appear in the app.
 
+## Live Reload
+
+This is particularly useful when writing code that interacts with native plugins. Since we need to run native plugin code on a device in order to verify that it works, having a way to quickly write code, build and deploy it, then test it is crucial to keeping up our development speed.
+
+Select your platform of choice (iOS or Android) and connect a device to your computer. Next, run either command in a terminal, based on your chosen platform:
+
+```shell
+$ ionic cap run ios -l --external
+
+$ ionic cap run android -l --external
+```
+
+The Live Reload server will start up, and the native IDE of choice will open if not opened already. Within the IDE, click the Play button to launch the app onto your device.
+
